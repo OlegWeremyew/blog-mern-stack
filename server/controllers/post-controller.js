@@ -15,6 +15,23 @@ export const getAll = async (req, res) => {
   }
 }
 
+export const getLastTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec()
+
+    const tags = posts.map((post) => post.tags).flat().slice(0, 5)
+
+    res.json(tags)
+
+  } catch (err) {
+    console.log(err)
+
+    res.status(500).json({
+      message: 'Не удалось получить теги',
+    })
+  }
+}
+
 export const getOne = async (req, res) => {
   try {
     const postID = req.params.id
@@ -54,7 +71,7 @@ export const create = async (req, res) => {
   try {
     const doc = new PostModel({
       title: req.body.title,
-      description:req.body.description,
+      description: req.body.description,
       tags: req.body.tags,
       imageUrl: req.body.imageUrl,
       user: req.userID
