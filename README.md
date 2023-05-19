@@ -23,7 +23,7 @@ npm run dev
 1. **React**
 2. **TypeScript**
 3. **Material-UI**
-4. 
+
 ### Project setup
 ```
 npm install
