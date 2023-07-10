@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Post, Index, CommentsBlock} from "../components";
 import {useParams} from "react-router-dom";
 import {instance} from "../api/instance";
+import ReactMarkdown from "react-markdown";
 
 export const FullPost = () => {
   const [data, setData] = useState({})
@@ -28,16 +29,14 @@ export const FullPost = () => {
       <Post
         id={data._id}
         title={data.title}
-        imageUrl={data.imageUrl}
+        imageUrl={data.imageUrl ? `http://localhost:4444${data.imageUrl}` : ''}
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
         commentsCount={3}
         tags={data.tags}
       >
-        <p>
-          {data.description}
-        </p>
+        <ReactMarkdown children={data.description}/>
       </Post>
       <CommentsBlock
         items={[

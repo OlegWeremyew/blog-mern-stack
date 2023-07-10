@@ -36,28 +36,31 @@ export const getOne = async (req, res) => {
   try {
     const postID = req.params.id
     await PostModel.findOneAndUpdate(
-      {
-        _id: postID,
-      }, {
-        $inc: {viewsCount: 1},
-      }, {
-        returnDocument: 'after',
-      }
-    ).then((doc) => {
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Статья не найдена'
-          })
+        {
+          _id: postID,
+        }, {
+          $inc: {viewsCount: 1},
+        }, {
+          returnDocument: 'after',
+          populate: 'user'
         }
+      )
+      .then((doc) => {
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена'
+            })
+          }
 
-        res.status(200).json(doc)
-      }
-    ).catch((err) => {
-      console.log(err)
-      return res.status(500).json({
-        message: 'Не удалось вернуть статью',
+          res.status(200).json(doc)
+        }
+      )
+      .catch((err) => {
+        console.log(err)
+        return res.status(500).json({
+          message: 'Не удалось вернуть статью',
+        })
       })
-    })
   } catch (err) {
     console.log(err)
 
@@ -72,7 +75,7 @@ export const create = async (req, res) => {
     const doc = new PostModel({
       title: req.body.title,
       description: req.body.description,
-      tags: req.body.tags,
+      tags: req.body.tags.split(','),
       imageUrl: req.body.imageUrl,
       user: req.userID
     })
